@@ -5,8 +5,11 @@ from linear_regression import LinearRegressionModel
 from tests import ModelEvaluation
 
 # Load dataset
+df = pd.read_csv("data/data.csv")
 
 # Perform data cleaning
+df = df.drop(columns="Survived")
+df_cleaned = df.dropna()
 
 # Split into train and test sets
 
