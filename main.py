@@ -5,6 +5,10 @@ from linear_regression import LinearRegressionModel
 from tests import ModelEvaluation
 
 # Load dataset
+df = pd.read_csv("data/data.csv")
+
+df = df.drop(columns=['Name', 'Ticket', 'Cabin'], inplace=True)
+
 
 # Perform data cleaning
 
