@@ -10,7 +10,7 @@ class LinearRegressionModel(tf.keras.Model):
         # Define model layers
         super(LinearRegressionModel, self).__init__()
         self.x = tf.keras.Input(shape= (input_dim,))
-        self.y = tf.keras.Dense(1, activation = None)
+        self.y = tf.keras.layers.Dense(1, activation = None)
         
 
     def call(self, inputs):
@@ -20,10 +20,9 @@ class LinearRegressionModel(tf.keras.Model):
         :param inputs: Input tensor
         :return: Predicted values
         """
-        vars  = self.x(inputs)
-        return self.y(vars)
+        #vars  = self.x(inputs)
+        return self.y(inputs)
 
-        pass  # Implement forward pass
 
     def train_model(self, X_train, y_train, epochs=100, lr=0.01):
         """
@@ -34,6 +33,7 @@ class LinearRegressionModel(tf.keras.Model):
         :param epochs: Number of training epochs
         :param lr: Learning rate
         """
-        # model.compile
-        # model.fit
-        pass  # Implement training loop
+        self.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=lr),
+                               loss=tf.keras.losses.MeanSquaredError(),
+                               metrics = ["mae"])
+        self.fit(X_train, y_train, epochs =epochs)
