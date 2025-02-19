@@ -1,5 +1,4 @@
 import tensorflow as tf
-#### first commit ###
 
 class LinearRegressionModel(tf.keras.Model):
     def __init__(self, input_dim):
@@ -8,8 +7,11 @@ class LinearRegressionModel(tf.keras.Model):
 
         :param input_dim: Number of input features
         """
-        super(LinearRegressionModel, self).__init__()
         # Define model layers
+        super(LinearRegressionModel, self).__init__()
+        self.x = tf.keras.Input(shape= (input_dim,))
+        self.y = tf.keras.Dense(1, activation = None)
+        
 
     def call(self, inputs):
         """
@@ -18,6 +20,9 @@ class LinearRegressionModel(tf.keras.Model):
         :param inputs: Input tensor
         :return: Predicted values
         """
+        vars  = self.x(inputs)
+        return self.y(vars)
+
         pass  # Implement forward pass
 
     def train_model(self, X_train, y_train, epochs=100, lr=0.01):
@@ -29,4 +34,6 @@ class LinearRegressionModel(tf.keras.Model):
         :param epochs: Number of training epochs
         :param lr: Learning rate
         """
+        # model.compile
+        # model.fit
         pass  # Implement training loop
