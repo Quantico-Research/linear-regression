@@ -18,16 +18,18 @@ class ModelEvaluation:
         """
         Generates predictions using the trained model.
         """
-        pass  # Implement model predictions
+        return self.model.predict(self.X_test)
+
 
     def evaluate_mse(self):
         """
         Computes Mean Squared Error (MSE).
         """
-        pass  # Implement MSE calculation
+        return tf.keras.losses.MSE(self.predict(), self.y_test)
 
     def evaluate_mae(self):
         """
         Computes Mean Absolute Error (MAE).
         """
-        pass  # Implement MAE calculation
+        return tf.keras.losses.MAE(self.predict(), self.y_test)
+

@@ -10,7 +10,7 @@ class LinearRegressionModel(tf.keras.Model):
         # Define model layers
         super(LinearRegressionModel, self).__init__()
         self.x = tf.keras.Input(shape= (input_dim,))
-        self.y = tf.keras.layers.Dense(1, activation = None)
+        self.y = tf.keras.layers.Dense(1, activation = 'sigmoid')
         
 
     def call(self, inputs):
