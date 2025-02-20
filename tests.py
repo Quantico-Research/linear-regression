@@ -18,16 +18,21 @@ class ModelEvaluation:
         """
         Generates predictions using the trained model.
         """
-        pass  # Implement model predictions
+        predictions = self.model.predict(self.X_test, batch_size=32)
+        return predictions
 
     def evaluate_mse(self):
         """
         Computes Mean Squared Error (MSE).
         """
-        pass  # Implement MSE calculation
+        predictions = self.predict()
+        mse = mean_squared_error(self.y_test, predictions)
+        return mse
 
     def evaluate_mae(self):
         """
         Computes Mean Absolute Error (MAE).
         """
-        pass  # Implement MAE calculation
+        predictions = self.predict()
+        mae = mean_absolute_error(self.y_test, predictions)
+        return mae
