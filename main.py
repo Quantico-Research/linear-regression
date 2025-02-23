@@ -9,7 +9,7 @@ from linear_regression import LinearRegressionModel
 from tests import ModelEvaluation
 
 # Load dataset
-df = pd.read_csv("data/data.csv", quotechar='"')
+df = pd.read_csv("data/data.csv")
 
 # Drop columns not necessary for prediction
 df.drop(["PassengerId", "Name", "Ticket", "Cabin"], axis=1, inplace=True)
