@@ -9,11 +9,10 @@ from linear_regression import LinearRegressionModel
 from tests import ModelEvaluation
 
 # Load dataset
+df = pd.read_csv("data/data.csv", quotechar='"')
 
-df = pd.read_csv("data/data.csv")
-
-# Drop columns not necessary to prediction
-df.drop(["PassengerId", "Name", "Ticket", "Cabin"], axis = 1, inplace=True)
+# Drop columns not necessary for prediction
+df.drop(["PassengerId", "Name", "Ticket", "Cabin"], axis=1, inplace=True)
 
 # Fill missing Age with median
 df["Age"].fillna(df["Age"].median(), inplace=True)
@@ -21,27 +20,38 @@ df["Age"].fillna(df["Age"].median(), inplace=True)
 # Fill missing Embarked with mode
 df["Embarked"].fillna(df["Embarked"].mode()[0], inplace=True)
 
-# Convert Sex to numeirc (male = 1, female = 0)
+# Convert Sex to numeric (male = 1, female = 0)
 df["Sex"] = df["Sex"].map({"male": 1, "female": 0})
 
-# Convert the "Embarked" column into multiple binary (0/1) columns (one-hot encoding),
-# while dropping the first category to avoid redundancy.
+# Convert columns to numeric types safely
+numeric_columns = ['Pclass', 'Parch', 'Fare']
+for col in numeric_columns:
+    df[col] = pd.to_numeric(df[col], errors='coerce')
+
+# Drop rows with NaN values in critical columns
+df = df.dropna(subset=numeric_columns + ['Embarked'])
+
+# Convert to integers where applicable
+df["Pclass"] = df["Pclass"].astype(int)
+df["Parch"] = df["Parch"].astype(int)
+
+# One-hot encode Embarked
 df = pd.get_dummies(df, columns=["Embarked"], drop_first=True)
 
-# Convert to numeric
-df["Pclass"] = df["Pclass"].astype(int)     
-df["Parch"] = df["Parch"].astype(int)       
-df["Fare"] = df["Fare"].astype(float)   
+# Convert the one-hot encoded columns to integers
 df["Embarked_Q"] = df["Embarked_Q"].astype(int)
-df["Embarked_S"] = df["Embarked_S"].astype(int)    
+df["Embarked_S"] = df["Embarked_S"].astype(int)
 
-# Target/ Predictive columns
+# Ensure Fare is float
+df["Fare"] = df["Fare"].astype(float)
+
+# Target and predictors
 target = df["Survived"]
-predictors = df.drop(["Survived"], axis = 1)
+predictors = df.drop("Survived", axis=1)
 
 # Train-Test Split
 X_train, X_test, y_train, y_test = train_test_split(
-        predictors, target, test_size=0.2, random_state=42
+    predictors, target, test_size=0.2, random_state=42
 )
 
 # Initialize and train the model
@@ -59,7 +69,6 @@ mae = evaluation.evaluate_mae()
 print("\n--- Model Evaluation ---")
 print(f"Mean Squared Error (MSE): {mse}")
 print(f"Mean Absolute Error (MAE): {mae}")
-
 
 # Save predictions
 predictions = evaluation.predict()
