@@ -28,10 +28,15 @@ df["Sex"] = df["Sex"].map({"male": 1, "female": 0})
 # while dropping the first category to avoid redundancy.
 df = pd.get_dummies(df, columns=["Embarked"], drop_first=True)
 
-# Target column
-target = df["Survived"]
+# Convert to numeric
+df["Pclass"] = df["Pclass"].astype(int)     
+df["Parch"] = df["Parch"].astype(int)       
+df["Fare"] = df["Fare"].astype(float)   
+df["Embarked_Q"] = df["Embarked_Q"].astype(int)
+df["Embarked_S"] = df["Embarked_S"].astype(int)    
 
-# Predictive columns
+# Target/ Predictive columns
+target = df["Survived"]
 predictors = df.drop(["Survived"], axis = 1)
 
 # Train-Test Split
@@ -39,13 +44,24 @@ X_train, X_test, y_train, y_test = train_test_split(
         predictors, target, test_size=0.2, random_state=42
 )
 
+# Initialize and train the model
+input_dim = X_train.shape[1]
+model = LinearRegressionModel(input_dim=input_dim)
 
-
-
-
-
-# Split into train and test sets
-
-# Initialize and train model
+print("\n----Training Model----")
+model.train_model(X_train, y_train, epochs=100, lr=0.01)
 
 # Evaluate model performance
+evaluation = ModelEvaluation(model, X_test, y_test)
+mse = evaluation.evaluate_mse()
+mae = evaluation.evaluate_mae()
+
+print("\n--- Model Evaluation ---")
+print(f"Mean Squared Error (MSE): {mse}")
+print(f"Mean Absolute Error (MAE): {mae}")
+
+
+# Save predictions
+predictions = evaluation.predict()
+pd.DataFrame({"Predictions": predictions}).to_csv("predictions.csv", index=False)
+print("\nPredictions saved to 'predictions.csv'")
