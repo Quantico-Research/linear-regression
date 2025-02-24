@@ -25,11 +25,11 @@ class ModelEvaluation:
         """
         Computes Mean Squared Error (MSE).
         """
-        return tf.keras.losses.MSE(self.predict(), self.y_test)
+        return mean_squared_error(self.y_test, self.predict())
 
     def evaluate_mae(self):
         """
         Computes Mean Absolute Error (MAE).
         """
-        return tf.keras.losses.MAE(self.predict(), self.y_test)
+        return mean_absolute_error(self.y_test,self.predict())
 
