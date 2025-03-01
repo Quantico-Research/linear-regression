@@ -9,25 +9,16 @@ class LinearRegressionModel(tf.keras.Model):
         :param input_dim: Number of input features
         """
         super(LinearRegressionModel, self).__init__()
-        self.dense1 = tf.keras.layers.Dense(64, activation='relu', input_shape=(input_dim,))
-        self.batch_norm1 = tf.keras.layers.BatchNormalization()
-        self.dense2 = tf.keras.layers.Dense(32, activation='relu')
-        self.batch_norm2 = tf.keras.layers.BatchNormalization()
-        self.output_layer = tf.keras.layers.Dense(1, activation='sigmoid')  # Changed to sigmoid for binary output
+        # Define model layers
 
-
-    def call(self, inputs, training = False):
+    def call(self, inputs):
         """
         Forward pass for the model.
 
         :param inputs: Input tensor
         :return: Predicted values
         """
-        x = self.dense1(inputs)
-        x = self.batch_norm1(x, training=training)
-        x = self.dense2(x)
-        x = self.batch_norm2(x, training=training)
-        return self.output_layer(x)
+        pass  # Implement forward pass
 
     def train_model(self, X_train, y_train, epochs=100, lr=0.01):
         """
@@ -38,31 +29,4 @@ class LinearRegressionModel(tf.keras.Model):
         :param epochs: Number of training epochs
         :param lr: Learning rate
         """
-        # Use binary_crossentropy for binary classification
-        self.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=lr),
-                    loss='binary_crossentropy',  # Better for binary classification
-                    metrics=['accuracy', 'mae'])
-        
-        # Add callbacks for better training
-        callbacks = [
-            tf.keras.callbacks.EarlyStopping(
-                monitor='val_loss',
-                patience=10,
-                restore_best_weights=True
-            ),
-            tf.keras.callbacks.ReduceLROnPlateau(
-                monitor='val_loss',
-                factor=0.5,
-                patience=5,
-                min_lr=0.00001
-            )
-        ]
-        
-        # Use validation split to monitor performance during training
-        history = self.fit(X_train, y_train, 
-                       epochs=epochs,
-                       batch_size=32,
-                       validation_split=0.1,
-                       callbacks=callbacks)
-        
-        return history
+        pass  # Implement training loop
